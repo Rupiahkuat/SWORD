@@ -1,17 +1,17 @@
 "use strict";
 
-const \$ = (selector) => document.querySelector(selector);
+const $ = (selector) => document.querySelector(selector);
 
 
 /* =========================================================
    01 — PASSWORD GENERATOR
    ========================================================= */
 
-const passwordLength = \$("#password-length");
-const passwordLengthValue = \$("#password-length-value");
-const passwordStrength = \$("#password-strength");
-const includeSymbols = \$("#include-symbols");
-const passwordOutput = \$("#password-output");
+const passwordLength = $("#password-length");
+const passwordLengthValue = $("#password-length-value");
+const passwordStrength = $("#password-strength");
+const includeSymbols = $("#include-symbols");
+const passwordOutput = $("#password-output");
 
 const LETTERS =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -20,24 +20,8 @@ const NUMBERS =
     "0123456789";
 
 const SYMBOLS =
-    "!@#\$%^&*()-_=+[]{};:,.?";
+    "!@#$%^&*()-_=+[]{};:,.?";
 
-function randomIndex(max) {
-    if (crypto?.getRandomValues) {
-        const data = new Uint32Array(1);
-        crypto.getRandomValues(data);
-        return data[0] % max;
-    }
-    return Math.floor(Math.random() * max);
-}
-
-function generatePassword() {
-    const length = Number(passwordLength.value);
-    let chars = LETTERS + NUMBERS;
-
-    if (includeSymbols.checked) {
-        chars += SYMBOLS;
-    }
 
     let result = "";
     for (let i = 0; i < length; i++) {

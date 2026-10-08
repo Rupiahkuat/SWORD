@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SWORD - Fast client-side utility tools.">
+    <meta name="theme-color" content="#080a0d">
+    <title>SWORD — Utility Tools Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container header-inner">
+        <a href="#" class="brand" aria-label="SWORD Home">
+            <span class="brand-mark">S</span>
+            <span>SWORD</span>
+        </a>
+
+        <span class="brand-subtitle">
+            Utility Tools Hub
+        </span>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="hero">
+        <p class="eyebrow">INSTANT UTILITIES</p>
+
+        <h1>
+            Simple tools.<br>
+            <span>Zero hassle.</span>
+        </h1>
+
+        <p class="hero-text">
+            Fast, private utilities running directly inside your browser.
+        </p>
+    </section>
+
+    <section class="tools-grid" aria-label="SWORD Utility Tools">
+
+        <!-- TOOL 01 -->
+
+        <article class="tool-card">
+            <div class="tool-header">
+                <span class="tool-number">01</span>
+                <h2>Password Generator</h2>
+            </div>
+
+            <p class="tool-description">
+                Generate strong random passwords instantly.
+            </p>
+
+            <div class="tool-content">
+                <label for="password-length">
+                    Length:
+                    <strong id="password-length-value">16</strong>
+                </label>
+
+                <input
+                    type="range"
+                    id="password-length"
+                    min="4"
+                    max="64"
+                    value="16"
+                >
+
+                <small id="password-strength">
+                    Good password length
+                </small>
+
+                <label class="checkbox-row">
+                    <input
+                        type="checkbox"
+                        id="include-symbols"
+                        checked
+                    >
+                    <span>Use symbols</span>
+                </label>
+
+                <div class="output-row">
+                    <input
+                        type="text"
+                        id="password-output"
+                        readonly
+                    >
+
+                    <button
+                        id="copy-password"
+                        type="button"
+                    >
+                        Copy
+                    </button>
+                </div>
+
+                <button
+                    id="generate-password"
+                    class="primary-button"
+                    type="button"
+                >
+                    Generate Password
+                </button>
+            </div>
+        </article>
+
+
+        <!-- TOOL 02 -->
+
+        <article class="tool-card">
+            <div class="tool-header">
+                <span class="tool-number">02</span>
+                <h2>Text Utility</h2>
+            </div>
+
+            <p class="tool-description">
+                Transform text and remove duplicate lines.
+            </p>
+
+            <div class="tool-content">
+                <label for="text-input">Text</label>
+
+                <textarea
+                    id="text-input"
+                    rows="7"
+                    placeholder="Enter your text..."
+                ></textarea>
+
+                <div class="button-group">
+                    <button
+                        id="uppercase-text"
+                        type="button"
+                    >
+                        UPPERCASE
+                    </button>
+
+                    <button
+                        id="lowercase-text"
+                        type="button"
+                    >
+                        lowercase
+                    </button>
+
+                    <button
+                        id="remove-duplicates"
+                        type="button"
+                    >
+                        Remove Duplicates
+                    </button>
+
+                    <button
+                        id="clear-text"
+                        type="button"
+                    >
+                        Clear
+                    </button>
+                </div>
+
+                <div class="text-stats">
+                    <span>
+                        Characters:
+                        <strong id="character-count">0</strong>
+                    </span>
+
+                    <span>
+                        Words:
+                        <strong id="word-count">0</strong>
+                    </span>
+                </div>
+            </div>
+        </article>
+
+
+        <!-- TOOL 03 -->
+
+        <article class="tool-card">
+            <div class="tool-header">
+                <span class="tool-number">03</span>
+                <h2>URL Security Check</h2>
+            </div>
+
+            <p class="tool-description">
+                Check URL structure and suspicious patterns locally.
+            </p>
+
+            <div class="tool-content">
+                <label for="url-input">URL</label>
+
+                <input
+                    type="url"
+                    id="url-input"
+                    placeholder="https://example.com/path"
+                    autocomplete="off"
+                >
+
+                <button
+                    id="check-url"
+                    class="primary-button"
+                    type="button"
+                >
+                    Check URL
+                </button>
+
+                <div
+                    id="url-result"
+                    class="result-box"
+                    aria-live="polite"
+                >
+                    Enter a URL to begin.
+                </div>
+            </div>
+        </article>
+
+
+        <!-- TOOL 04 -->
+
+        <article class="tool-card">
+            <div class="tool-header">
+                <span class="tool-number">04</span>
+                <h2>Base64 Converter</h2>
+            </div>
+
+            <p class="tool-description">
+                Encode or decode text using Base64.
+            </p>
+
+            <div class="tool-content">
+                <label for="base64-input">Input</label>
+
+                <textarea
+                    id="base64-input"
+                    rows="5"
+                    placeholder="Enter text..."
+                ></textarea>
+
+                <div class="button-group">
+                    <button
+                        id="base64-encode"
+                        type="button"
+                    >
+                        Encode
+                    </button>
+
+                    <button
+                        id="base64-decode"
+                        type="button"
+                    >
+                        Decode
+                    </button>
+                </div>
+
+                <label for="base64-output">
+                    Output
+                </label>
+
+                <div class="output-row">
+                    <textarea
+                        id="base64-output"
+                        rows="4"
+                        readonly
+                    ></textarea>
+
+                    <button
+                        id="copy-base64"
+                        type="button"
+                    >
+                        Copy
+                    </button>
+                </div>
+
+                <div
+                    id="base64-result"
+                    class="result-box"
+                    aria-live="polite"
+                ></div>
+            </div>
+        </article>
+
+
+        <!-- TOOL 05 -->
+
+        <article class="tool-card">
+            <div class="tool-header">
+                <span class="tool-number">05</span>
+                <h2>Hash Generator</h2>
+            </div>
+
+            <p class="tool-description">
+                Generate MD5 and SHA-256 hashes while typing.
+            </p>
+
+            <div class="tool-content">
+                <label for="hash-input">
+                    Input
+                </label>
+
+                <input
+                    type="text"
+                    id="hash-input"
+                    placeholder="Type something..."
+                >
+
+                <label for="md5-output">
+                    MD5
+                </label>
+
+                <input
+                    type="text"
+                    id="md5-output"
+                    readonly
+                >
+
+                <label for="sha256-output">
+                    SHA-256
+                </label>
+
+                <input
+                    type="text"
+                    id="sha256-output"
+                    readonly
+                >
+            </div>
+        </article>
+
+
+        <!-- TOOL 06 -->
+
+        <article class="tool-card">
+            <div class="tool-header">
+                <span class="tool-number">06</span>
+                <h2>JSON Formatter</h2>
+            </div>
+
+            <p class="tool-description">
+                Format and validate JSON with clean indentation.
+            </p>
+
+            <div class="tool-content">
+                <label for="json-input">
+                    JSON
+                </label>
+
+                <textarea
+                    id="json-input"
+                    rows="8"
+                    placeholder='{"name":"SWORD"}'
+                ></textarea>
+
+                <button
+                    id="format-json"
+                    class="primary-button"
+                    type="button"
+                >
+                    Format JSON
+                </button>
+
+                <div
+                    id="json-result"
+                    class="result-box"
+                    aria-live="polite"
+                ></div>
+            </div>
+        </article>
+
+
+        <!-- TOOL 07 -->
+
+        <article class="tool-card">
+            <div class="tool-header">
+                <span class="tool-number">07</span>
+                <h2>HTML Escaper</h2>
+            </div>
+
+            <p class="tool-description">
+                Escape or unescape special HTML characters instantly.
+            </p>
+
+            <div class="tool-content">
+                <label for="html-input">
+                    HTML
+                </label>
+
+                <textarea
+                    id="html-input"
+                    rows="7"
+                    placeholder="<div>Hello & welcome</div>"
+                ></textarea>
+
+                <div class="button-group">
+                    <button
+                        id="escape-html"
+                        type="button"
+                    >
+                        Escape HTML
+                    </button>
+
+                    <button
+                        id="unescape-html"
+                        type="button"
+                    >
+                        Unescape HTML
+                    </button>
+                </div>
+
+                <label for="html-output">
+                    Output
+                </label>
+
+                <div class="output-row">
+                    <textarea
+                        id="html-output"
+                        rows="5"
+                        readonly
+                    ></textarea>
+
+                    <button
+                        id="copy-html"
+                        type="button"
+                    >
+                        Copy
+                    </button>
+                </div>
+
+                <div
+                    id="html-result"
+                    class="result-box"
+                    aria-live="polite"
+                ></div>
+            </div>
+        </article>
+
+
+        <!-- TOOL 08 -->
+
+        <article class="tool-card">
+            <div class="tool-header">
+                <span class="tool-number">08</span>
+                <h2>Unix Timestamp</h2>
+            </div>
+
+            <p class="tool-description">
+                Convert Unix Epoch timestamps into readable local dates.
+            </p>
+
+            <div class="tool-content">
+                <label for="timestamp-input">
+                    Timestamp
+                </label>
+
+                <input
+                    type="text"
+                    id="timestamp-input"
+                    inputmode="numeric"
+                    placeholder="1728360000"
+                    autocomplete="off"
+                >
+
+                <div class="button-group">
+                    <button
+                        id="convert-timestamp"
+                        class="primary-button"
+                        type="button"
+                    >
+                        Convert
+                    </button>
+
+                    <button
+                        id="current-timestamp"
+                        type="button"
+                    >
+                        Gunakan Waktu Sekarang
+                    </button>
+                </div>
+
+                <div
+                    id="timestamp-result"
+                    class="result-box"
+                    aria-live="polite"
+                >
+                    Masukkan timestamp untuk melihat tanggal.
+                </div>
+            </div>
+        </article>
+
+
+        <!-- TOOL 09 -->
+
+        <article class="tool-card">
+            <div class="tool-header">
+                <span class="tool-number">09</span>
+                <h2>URL Encoder</h2>
+            </div>
+
+            <p class="tool-description">
+                Encode atau decode data URL secara instan dan aman.
+            </p>
+
+            <div class="tool-content">
+                <label for="url-encode-input">
+                    Input
+                </label>
+
+                <textarea
+                    id="url-encode-input"
+                    rows="7"
+                    placeholder="https://example.com/search?q=hello world"
+                ></textarea>
+
+                <div class="button-group">
+                    <button
+                        id="encode-url"
+                        type="button"
+                    >
+                        Encode URL
+                    </button>
+
+                    <button
+                        id="decode-url"
+                        type="button"
+                    >
+                        Decode URL
+                    </button>
+                </div>
+
+                <label for="url-encode-output">
+                    Output
+                </label>
+
+                <div class="output-row">
+                    <textarea
+                        id="url-encode-output"
+                        rows="5"
+                        readonly
+                    ></textarea>
+
+                    <button
+                        id="copy-url-output"
+                        type="button"
+                    >
+                        Copy
+                    </button>
+                </div>
+
+                <div
+                    id="url-result"
+                    class="result-box"
+                    aria-live="polite"
+                ></div>
+            </div>
+        </article>
+
+    </section>
+</main>
+
+
+<footer class="site-footer">
+    <div class="container">
+        <p>
+            SWORD Utility Tools Hub · Client-side only
+        </p>
+    </div>
+</footer>
+
+
+<script src="script.js" defer></script>
+
+</body>
+</html>
+

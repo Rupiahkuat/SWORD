@@ -2,26 +2,35 @@
 
 const $ = (selector) => document.querySelector(selector);
 
-
 /* =========================================================
    01 — PASSWORD GENERATOR
    ========================================================= */
-
 const passwordLength = $("#password-length");
 const passwordLengthValue = $("#password-length-value");
 const passwordStrength = $("#password-strength");
 const includeSymbols = $("#include-symbols");
 const passwordOutput = $("#password-output");
 
-const LETTERS =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const NUMBERS = "0123456789";
+const SYMBOLS = "!@#$%^&*()-_=+[]{};:,.?";
 
-const NUMBERS =
-    "0123456789";
+function randomIndex(max) {
+    if (crypto && crypto.getRandomValues) {
+        const data = new Uint32Array(1);
+        crypto.getRandomValues(data);
+        return data[0] % max;
+    }
+    return Math.floor(Math.random() * max);
+}
 
-const SYMBOLS =
-    "!@#$%^&*()-_=+[]{};:,.?";
+function generatePassword() {
+    const length = Number(passwordLength.value);
+    let chars = LETTERS + NUMBERS;
 
+    if (includeSymbols.checked) {
+        chars += SYMBOLS;
+    }
 
     let result = "";
     for (let i = 0; i < length; i++) {
@@ -49,11 +58,9 @@ function updatePasswordStrength(length) {
     }
 }
 
-
 /* =========================================================
    COPY HELPER
    ========================================================= */
-
 async function copyText(value, button) {
     if (!value) return;
 
@@ -68,14 +75,12 @@ async function copyText(value, button) {
     }
 }
 
-
 /* =========================================================
    02 — TEXT UTILITY
    ========================================================= */
-
-const textInput = \$("#text-input");
-const characterCount = \$("#character-count");
-const wordCount = \$("#word-count");
+const textInput = $("#text-input");
+const characterCount = $("#character-count");
+const wordCount = $("#word-count");
 
 function updateTextStats() {
     const text = textInput.value;
@@ -85,19 +90,17 @@ function updateTextStats() {
 }
 
 function removeDuplicates() {
-    const lines = textInput.value.split(\(/\r\)?\n/);
+    const lines = textInput.value.split(/\r?\n/);
     const unique = [...new Set(lines)];
     textInput.value = unique.join("\n");
     updateTextStats();
 }
 
-
 /* =========================================================
    03 — URL SECURITY CHECK
    ========================================================= */
-
-const urlInput = \$("#url-input");
-const urlResult = \$("#url-result");
+const urlInput = $("#url-input");
+const urlResult = $("#url-result");
 
 function checkURL() {
     const value = urlInput.value.trim();
@@ -115,7 +118,7 @@ function checkURL() {
     }
 
     if (!["http:", "https:"].includes(url.protocol)) {
-        urlResult.textContent = "⚠️ Skema URL harus HTTP or HTTPS.";
+        urlResult.textContent = "⚠️ Skema URL harus HTTP atau HTTPS.";
         return;
     }
 
@@ -131,14 +134,12 @@ function checkURL() {
     urlResult.textContent = `✅ URL terlihat valid. Domain: ${url.hostname}`;
 }
 
-
 /* =========================================================
    04 — BASE64 CONVERTER
    ========================================================= */
-
-const base64Input = \$("#base64-input");
-const base64Output = \$("#base64-output");
-const base64Result = \$("#base64-result");
+const base64Input = $("#base64-input");
+const base64Output = $("#base64-output");
+const base64Result = $("#base64-result");
 
 function encodeBase64() {
     try {
@@ -162,13 +163,13 @@ function decodeBase64() {
         base64Result.textContent = "❌ Format Base64 tidak valid / rusak.";
     }
 }
+
 /* =========================================================
    05 — HASH GENERATOR
    ========================================================= */
-
-const hashInput = \$("#hash-input");
-const md5Output = \$("#md5-output");
-const sha256Output = \$("#sha256-output");
+const hashInput = $("#hash-input");
+const md5Output = $("#md5-output");
+const sha256Output = $("#sha256-output");
 
 async function updateSHA256(text) {
     const data = new TextEncoder().encode(text);
@@ -182,7 +183,6 @@ function md5(input) {
     function rotateLeft(value, amount) {
         return (value << amount) | (value >>> (32 - amount));
     }
-
     function add(x, y) {
         return (x + y) >>> 0;
     }
@@ -192,9 +192,7 @@ function md5(input) {
     const bitLength = bytes.length * 8;
 
     bytes.push(0x80);
-    while (bytes.length % 64 !== 56) {
-        bytes.push(0);
-    }
+    while (bytes.length % 64 !== 56) bytes.push(0);
 
     for (let i = 0; i < 8; i++) {
         bytes.push((bitLength / 2 ** (8 * i)) & 255);
@@ -224,22 +222,12 @@ function md5(input) {
         }
 
         let a = a0, b = b0, c = c0, d = d0;
-
         for (let i = 0; i < 64; i++) {
             let f, g;
-            if (i < 16) {
-                f = (b & c) | (~b & d);
-                g = i;
-            } else if (i < 32) {
-                f = (d & b) | (~d & c);
-                g = (5 * i + 1) % 16;
-            } else if (i < 48) {
-                f = b ^ c ^ d;
-                g = (3 * i + 5) % 16;
-            } else {
-                f = c ^ (b | ~d);
-                g = (7 * i) % 16;
-            }
+            if (i < 16) { f = (b & c) | (~b & d); g = i; }
+            else if (i < 32) { f = (d & b) | (~d & c); g = (5 * i + 1) % 16; }
+            else if (i < 48) { f = b ^ c ^ d; g = (3 * i + 5) % 16; }
+            else { f = c ^ (b | ~d); g = (7 * i) % 16; }
 
             const temp = d;
             d = c;
@@ -249,21 +237,15 @@ function md5(input) {
             b = add(b, rotateLeft(sum, shifts[i]));
             a = temp;
         }
-
         a0 = add(a0, a);
         b0 = add(b0, b);
         c0 = add(c0, c);
         d0 = add(d0, d);
     }
 
-    const result = [a0, b0, c0, d0];
-    return result
-        .map((word) =>
-            [0, 1, 2, 3]
-                .map((i) => ((word >>> (8 * i)) & 255).toString(16).padStart(2, "0"))
-                .join("")
-        )
-        .join("");
+    return [a0, b0, c0, d0].map((word) =>
+        [0, 1, 2, 3].map((i) => ((word >>> (8 * i)) & 255).toString(16).padStart(2, "0")).join("")
+    ).join("");
 }
 
 async function updateHashes() {
@@ -272,13 +254,11 @@ async function updateHashes() {
     await updateSHA256(value);
 }
 
-
 /* =========================================================
    06 — JSON FORMATTER
    ========================================================= */
-
-const jsonInput = \$("#json-input");
-const jsonResult = \$("#json-result");
+const jsonInput = $("#json-input");
+const jsonResult = $("#json-result");
 
 function formatJSON() {
     try {
@@ -290,14 +270,12 @@ function formatJSON() {
     }
 }
 
-
 /* =========================================================
    07 — HTML ESCAPER / UNESCAPER
    ========================================================= */
-
-const htmlInput = \$("#html-input");
-const htmlOutput = \$("#html-output");
-const htmlResult = \$("#html-result");
+const htmlInput = $("#html-input");
+const htmlOutput = $("#html-output");
+const htmlResult = $("#html-result");
 
 function escapeHTML() {
     const value = htmlInput.value;
@@ -318,135 +296,100 @@ function unescapeHTML() {
     htmlResult.textContent = "✅ HTML berhasil di-unescape.";
 }
 
-
 /* =========================================================
    08 — UNIX TIMESTAMP CONVERTER
    ========================================================= */
-
-const timestampInput = \$("#timestamp-input");
-const timestampResult = \$("#timestamp-result");
+const timestampInput = $("#timestamp-input");
+const timestampResult = $("#timestamp-result");
 
 function convertTimestamp() {
     const raw = timestampInput.value.trim();
     if (!raw) {
-        timestampResult.textContent = "⚠️ Masukkan timestamp terlebih dahulu.";
-        return;
-    }
-
-    const timestamp = Number(raw);
-    if (!Number.isFinite(timestamp)) {
-        timestampResult.textContent = "❌ Timestamp tidak valid.";
-        return;
-    }
-
-    const milliseconds = Math.abs(timestamp) < 1e11 ? timestamp * 1000 : timestamp;
-    const date = new Date(milliseconds);
-
-    if (Number.isNaN(date.getTime())) {
-        timestampResult.textContent = "❌ Timestamp menghasilkan tanggal tidak valid.";
-        return;
-    }
-
-    const localDate = date.toLocaleString("id-ID", { dateStyle: "full", timeStyle: "medium" });
-    const utcDate = date.toISOString();
-
-    timestampResult.textContent = `Local: ${localDate}\nUTC: ${utcDate}`;
-    timestampResult.style.whiteSpace = "pre-line";
+timestampResult.textContent = "⚠️ Masukkan timestamp terlebih dahulu.";
+return;
 }
-
+const timestamp = Number(raw);
+if (!Number.isFinite(timestamp)) {
+timestampResult.textContent = "❌ Timestamp tidak valid.";
+return;
+}
+const milliseconds = Math.abs(timestamp) < 1e11 ? timestamp * 1000 : timestamp;
+const date = new Date(milliseconds);
+if (Number.isNaN(date.getTime())) {
+timestampResult.textContent = "❌ Timestamp menghasilkan tanggal tidak valid.";
+return;
+}
+const localDate = date.toLocaleString("id-ID", { dateStyle: "full", timeStyle: "medium" });
+const utcDate = date.toISOString();
+timestampResult.textContent = Local: ${localDate}\nUTC: ${utcDate};
+timestampResult.style.whiteSpace = "pre-line";
+}
 function useCurrentTimestamp() {
-    const timestamp = Math.floor(Date.now() / 1000);
-    timestampInput.value = timestamp;
-    convertTimestamp();
+const timestamp = Math.floor(Date.now() / 1000);
+timestampInput.value = timestamp;
+convertTimestamp();
 }
-
-
 /* =========================================================
-   09 — URL ENCODER / DECODER
-   ========================================================= */
-
-const urlEncodeInput = \$("#url-encode-input");
-const urlEncodeOutput = \$("#url-encode-output");
-const urlEncodeResult = \$("#url-result");
-
+09 — URL ENCODER / DECODER
+========================================================= */
+const urlEncodeInput = $("#url-encode-input");
+const urlEncodeOutput = $("#url-encode-output");
+const urlEncodeResult = $("#url-result");
 function encodeURL() {
-    const value = urlEncodeInput.value;
-    if (!value) {
-        urlEncodeResult.textContent = "⚠️ Masukkan data URL terlebih dahulu.";
-        return;
-    }
-    try {
-        urlEncodeOutput.value = encodeURIComponent(value);
-        urlEncodeResult.textContent = "✅ URL berhasil di-encode.";
-    } catch {
-        urlEncodeResult.textContent = "❌ Data URL tidak dapat di-encode.";
-    }
+const value = urlEncodeInput.value;
+if (!value) {
+urlEncodeResult.textContent = "⚠️ Masukkan data URL terlebih dahulu.";
+return;
 }
-
+try {
+urlEncodeOutput.value = encodeURIComponent(value);
+urlEncodeResult.textContent = "✅ URL berhasil di-encode.";
+} catch {
+urlEncodeResult.textContent = "❌ Data URL tidak dapat di-encode.";
+}
+}
 function decodeURL() {
-    const value = urlEncodeInput.value;
-    if (!value) {
-        urlEncodeResult.textContent = "⚠️ Masukkan data URL terlebih dahulu.";
-        return;
-    }
-    try {
-        urlEncodeOutput.value = decodeURIComponent(value);
-        urlEncodeResult.textContent = "✅ URL berhasil di-decode.";
-    } catch {
-        urlEncodeResult.textContent = "❌ Format URL encoded tidak valid / rusak.";
-    }
+const value = urlEncodeInput.value;
+if (!value) {
+urlEncodeResult.textContent = "⚠️ Masukkan data URL terlebih dahulu.";
+return;
 }
-
-
+try {
+urlEncodeOutput.value = decodeURIComponent(value);
+urlEncodeResult.textContent = "✅ URL berhasil di-decode.";
+} catch {
+urlEncodeResult.textContent = "❌ Format URL encoded tidak valid / rusak.";
+}
+}
 /* =========================================================
-   EVENT LISTENERS
-   ========================================================= */
-
-/* Password */
-\$("#generate-password").addEventListener("click", generatePassword);
+EVENT LISTENERS
+========================================================= */
+$("#generate-password").addEventListener("click", generatePassword);
 passwordLength.addEventListener("input", generatePassword);
 includeSymbols.addEventListener("change", generatePassword);
-\(("#copy-password").addEventListener("click", () => copyText(passwordOutput.value, \)("#copy-password")));
-
-/* Text */
+$("#copy-password").addEventListener("click", () => copyText(passwordOutput.value, $("#copy-password")));
 textInput.addEventListener("input", updateTextStats);
-\$("#uppercase-text").addEventListener("click", () => { textInput.value = textInput.value.toUpperCase(); updateTextStats(); });
-\$("#lowercase-text").addEventListener("click", () => { textInput.value = textInput.value.toLowerCase(); updateTextStats(); });
-\$("#remove-duplicates").addEventListener("click", removeDuplicates);
-\$("#clear-text").addEventListener("click", () => { textInput.value = ""; updateTextStats(); });
-
-/* URL Security */
-\$("#check-url").addEventListener("click", checkURL);
-
-/* Base64 */
-\$("#base64-encode").addEventListener("click", encodeBase64);
-\$("#base64-decode").addEventListener("click", decodeBase64);
-\(("#copy-base64").addEventListener("click", () => copyText(base64Output.value, \)("#copy-base64")));
-
-/* Hash */
+$("#uppercase-text").addEventListener("click", () => { textInput.value = textInput.value.toUpperCase(); updateTextStats(); });
+$("#lowercase-text").addEventListener("click", () => { textInput.value = textInput.value.toLowerCase(); updateTextStats(); });
+$("#remove-duplicates").addEventListener("click", removeDuplicates);
+$("#clear-text").addEventListener("click", () => { textInput.value = ""; updateTextStats(); });
+$("#check-url").addEventListener("click", checkURL);
+$("#base64-encode").addEventListener("click", encodeBase64);
+$("#base64-decode").addEventListener("click", decodeBase64);
+$("#copy-base64").addEventListener("click", () => copyText(base64Output.value, $("#copy-base64")));
 hashInput.addEventListener("input", updateHashes);
-
-/* JSON */
-\$("#format-json").addEventListener("click", formatJSON);
-
-/* HTML */
-\$("#escape-html").addEventListener("click", escapeHTML);
-\$("#unescape-html").addEventListener("click", unescapeHTML);
-\(("#copy-html").addEventListener("click", () => copyText(htmlOutput.value, \)("#copy-html")));
-
-/* Timestamp */
-\$("#convert-timestamp").addEventListener("click", convertTimestamp);
-\$("#current-timestamp").addEventListener("click", useCurrentTimestamp);
-
-/* URL Encoder */
-\$("#encode-url").addEventListener("click", encodeURL);
-\$("#decode-url").addEventListener("click", decodeURL);
-\(("#copy-url-output").addEventListener("click", () => copyText(urlEncodeOutput.value, \)("#copy-url-output")));
-
-
+$("#format-json").addEventListener("click", formatJSON);
+$("#escape-html").addEventListener("click", escapeHTML);
+$("#unescape-html").addEventListener("click", unescapeHTML);
+$("#copy-html").addEventListener("click", () => copyText(htmlOutput.value, $("#copy-html")));
+$("#convert-timestamp").addEventListener("click", convertTimestamp);
+$("#current-timestamp").addEventListener("click", useCurrentTimestamp);
+$("#encode-url").addEventListener("click", encodeURL);
+$("#decode-url").addEventListener("click", decodeURL);
+$("#copy-url-output").addEventListener("click", () => copyText(urlEncodeOutput.value, $("#copy-url-output")));
 /* =========================================================
-   INITIAL STATE
-   ========================================================= */
+INITIAL STATE
+========================================================= */
 generatePassword();
 updateTextStats();
 updateHashes();

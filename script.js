@@ -1,4 +1,3 @@
-
 "use strict";
 
 const $ = (selector) => document.querySelector(selector);
@@ -509,502 +508,384 @@ function md5(input) {
 
             b =
                 add(
-                    b,
-                    rotateLeft(
-                        sum,
-                        shifts[i]
-                    )
-                );
-
-            a =
-                temp;
-        }
-
-        a0 =
-            add(a0, a);
-
-        b0 =
-            add(b0, b);
-
-        c0 =
-            add(c0, c);
-
-        d0 =
-            add(d0, d);
-    }
-
-    const result = [
-        a0,
-        b0,
-        c0,
-        d0
-    ];
-
-    return result
-        .map((word) =>
-            [0, 1, 2, 3]
-                .map((i) =>
-                    (
-                        (word >>> (8 * i))
-                        & 255
-                    )
-                        .toString(16)
-                        .padStart(2, "0")
-                )
-                .join("")
-        )
-        .join("");
+b,
+rotateLeft(
+sum,
+shifts[i]
+)
+);
+a =
+temp;
 }
-
+a0 =
+add(a0, a);
+b0 =
+add(b0, b);
+c0 =
+add(c0, c);
+d0 =
+add(d0, d);
+}
+const result = [
+a0,
+b0,
+c0,
+d0
+];
+return result
+.map((word) =>
+[0, 1, 2, 3]
+.map((i) =>
+(
+(word >>> (8 * i))
+& 255
+)
+.toString(16)
+.padStart(2, "0")
+)
+.join("")
+)
+.join("");
+}
 async function updateHashes() {
-    const value =
-        hashInput.value;
-
-    md5Output.value =
-        md5(value);
-
-    await updateSHA256(value);
+const value =
+hashInput.value;
+md5Output.value =
+md5(value);
+await updateSHA256(value);
 }
-
-
 /* =========================================================
-   06 — JSON FORMATTER
-   ========================================================= */
-
+06 — JSON FORMATTER
+========================================================= */
 const jsonInput =
-    $("#json-input");
-
+$("#json-input");
 const jsonResult =
-    $("#json-result");
-
+$("#json-result");
 function formatJSON() {
-    try {
-        const parsed =
-            JSON.parse(
-                jsonInput.value
-            );
-
-        jsonInput.value =
-            JSON.stringify(
-                parsed,
-                null,
-                4
-            );
-
-        jsonResult.textContent =
-            "✅ JSON berhasil diformat.";
-
-    } catch (error) {
-        jsonResult.textContent =
-            `❌ JSON tidak valid: ${error.message}`;
-    }
+try {
+const parsed =
+JSON.parse(
+jsonInput.value
+);
+jsonInput.value =
+JSON.stringify(
+parsed,
+null,
+4
+);
+jsonResult.textContent =
+"✅ JSON berhasil diformat.";
+} catch (error) {
+jsonResult.textContent =
+❌ JSON tidak valid: ${error.message};
 }
-
-
+}
 /* =========================================================
-   07 — HTML ESCAPER / UNESCAPER
-   ========================================================= */
-
+07 — HTML ESCAPER / UNESCAPER
+========================================================= */
 const htmlInput =
-    $("#html-input");
-
+$("#html-input");
 const htmlOutput =
-    $("#html-output");
-
+$("#html-output");
 const htmlResult =
-    $("#html-result");
-
+$("#html-result");
 function escapeHTML() {
-    const value =
-        htmlInput.value;
-
-    htmlOutput.value =
-        value
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#39;");
-
-    htmlResult.textContent =
-        "✅ HTML berhasil di-escape.";
+const value =
+htmlInput.value;
+htmlOutput.value =
+value
+.replace(/&/g, "&")
+.replace(/</g, "<")
+.replace(/>/g, ">")
+.replace(/"/g, """)
+.replace(/'/g, "'");
+htmlResult.textContent =
+"✅ HTML berhasil di-escape.";
 }
-
 function unescapeHTML() {
-    const value =
-        htmlInput.value;
-
-    /*
-     * Gunakan DOMParser agar tidak melakukan
-     * assignment innerHTML secara langsung.
-     */
-    const parser =
-        new DOMParser();
-
-    const documentFragment =
-        parser.parseFromString(
-            `<body>${value}</body>`,
-            "text/html"
-        );
-
-    htmlOutput.value =
-        documentFragment.body.textContent || "";
-
-    htmlResult.textContent =
-        "✅ HTML berhasil di-unescape.";
+const value =
+htmlInput.value;
+/*
+* Gunakan DOMParser agar tidak melakukan
+* assignment innerHTML secara langsung.
+*/
+const parser =
+new DOMParser();
+const documentFragment =
+parser.parseFromString(
+<body>${value}</body>,
+"text/html"
+);
+htmlOutput.value =
+documentFragment.body.textContent || "";
+htmlResult.textContent =
+"✅ HTML berhasil di-unescape.";
 }
-
-
 /* =========================================================
-   08 — UNIX TIMESTAMP CONVERTER
-   ========================================================= */
-
+08 — UNIX TIMESTAMP CONVERTER
+========================================================= */
 const timestampInput =
-    $("#timestamp-input");
-
+$("#timestamp-input");
 const timestampResult =
-    $("#timestamp-result");
-
+$("#timestamp-result");
 function convertTimestamp() {
-    const raw =
-        timestampInput.value.trim();
-
-    if (!raw) {
-        timestampResult.textContent =
-            "⚠️ Masukkan timestamp terlebih dahulu.";
-
-        return;
-    }
-
-    const timestamp =
-        Number(raw);
-
-    if (!Number.isFinite(timestamp)) {
-        timestampResult.textContent =
-            "❌ Timestamp tidak valid.";
-
-        return;
-    }
-
-    const milliseconds =
-        Math.abs(timestamp) < 1e11
-            ? timestamp * 1000
-            : timestamp;
-
-    const date =
-        new Date(milliseconds);
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-        timestampResult.textContent =
-            "❌ Timestamp menghasilkan tanggal tidak valid.";
-
-        return;
-    }
-
-    const localDate =
-        date.toLocaleString(
-            "id-ID",
-            {
-                dateStyle: "full",
-                timeStyle: "medium"
-            }
-        );
-
-    const utcDate =
-        date.toISOString();
-
-    timestampResult.textContent =
-        `Local: ${localDate}\nUTC: ${utcDate}`;
-
-    timestampResult.style.whiteSpace =
-        "pre-line";
+const raw =
+timestampInput.value.trim();
+if (!raw) {
+timestampResult.textContent =
+"⚠️ Masukkan timestamp terlebih dahulu.";
+return;
 }
-
+const timestamp =
+Number(raw);
+if (!Number.isFinite(timestamp)) {
+timestampResult.textContent =
+"❌ Timestamp tidak valid.";
+return;
+}
+const milliseconds =
+Math.abs(timestamp) < 1e11
+? timestamp * 1000
+: timestamp;
+const date =
+new Date(milliseconds);
+if (
+Number.isNaN(
+date.getTime()
+)
+) {
+timestampResult.textContent =
+"❌ Timestamp menghasilkan tanggal tidak valid.";
+return;
+}
+const localDate =
+date.toLocaleString(
+"id-ID",
+{
+dateStyle: "full",
+timeStyle: "medium"
+}
+);
+const utcDate =
+date.toISOString();
+timestampResult.textContent =
+Local: ${localDate}\nUTC: ${utcDate};
+timestampResult.style.whiteSpace =
+"pre-line";
+}
 function useCurrentTimestamp() {
-    const timestamp =
-        Math.floor(
-            Date.now() / 1000
-        );
-
-    timestampInput.value =
-        timestamp;
-
-    convertTimestamp();
+const timestamp =
+Math.floor(
+Date.now() / 1000
+);
+timestampInput.value =
+timestamp;
+convertTimestamp();
 }
-
-
 /* =========================================================
-   09 — URL ENCODER / DECODER
-   ========================================================= */
-
+09 — URL ENCODER / DECODER
+========================================================= */
 const urlEncodeInput =
-    $("#url-encode-input");
-
+$("#url-encode-input");
 const urlEncodeOutput =
-    $("#url-encode-output");
-
-const urlResult =
-    $("#url-result");
-
+$("#url-encode-output");
+const urlEncodeResult =
+$("#url-result"); // Perbaikan: Nama variabel diubah agar tidak bentrok dengan fitur 03
 function encodeURL() {
-    const value =
-        urlEncodeInput.value;
-
-    if (!value) {
-        urlResult.textContent =
-            "⚠️ Masukkan data URL terlebih dahulu.";
-
-        return;
-    }
-
-    try {
-        urlEncodeOutput.value =
-            encodeURIComponent(value);
-
-        urlResult.textContent =
-            "✅ URL berhasil di-encode.";
-
-    } catch {
-        urlResult.textContent =
-            "❌ Data URL tidak dapat di-encode.";
-    }
+const value =
+urlEncodeInput.value;
+if (!value) {
+urlEncodeResult.textContent =
+"⚠️ Masukkan data URL terlebih dahulu.";
+return;
 }
-
+try {
+urlEncodeOutput.value =
+encodeURIComponent(value);
+urlEncodeResult.textContent =
+"✅ URL berhasil di-encode.";
+} catch {
+urlEncodeResult.textContent =
+"❌ Data URL tidak dapat di-encode.";
+}
+}
 function decodeURL() {
-    const value =
-        urlEncodeInput.value;
-
-    if (!value) {
-        urlResult.textContent =
-            "⚠️ Masukkan data URL terlebih dahulu.";
-
-        return;
-    }
-
-    try {
-        urlEncodeOutput.value =
-            decodeURIComponent(value);
-
-        urlResult.textContent =
-            "✅ URL berhasil di-decode.";
-
-    } catch {
-        urlResult.textContent =
-            "❌ Format URL encoded tidak valid / rusak.";
-    }
+const value =
+urlEncodeInput.value;
+if (!value) {
+urlEncodeResult.textContent =
+"⚠️ Masukkan data URL terlebih dahulu.";
+return;
 }
-
-
+try {
+urlEncodeOutput.value =
+decodeURIComponent(value);
+urlEncodeResult.textContent =
+"✅ URL berhasil di-decode.";
+} catch {
+urlEncodeResult.textContent =
+"❌ Format URL encoded tidak valid / rusak.";
+}
+}
 /* =========================================================
-   EVENT LISTENERS
-   ========================================================= */
-
+EVENT LISTENERS
+========================================================= */
 /* Password */
-
 $("#generate-password")
-    .addEventListener(
-        "click",
-        generatePassword
-    );
-
+.addEventListener(
+"click",
+generatePassword
+);
 passwordLength
-    .addEventListener(
-        "input",
-        generatePassword
-    );
-
+.addEventListener(
+"input",
+generatePassword
+);
 includeSymbols
-    .addEventListener(
-        "change",
-        generatePassword
-    );
-
+.addEventListener(
+"change",
+generatePassword
+);
 $("#copy-password")
-    .addEventListener(
-        "click",
-        () =>
-            copyText(
-                passwordOutput.value,
-                $("#copy-password")
-            )
-    );
-
-
+.addEventListener(
+"click",
+() =>
+copyText(
+passwordOutput.value,
+$("#copy-password")
+)
+);
 /* Text */
-
 textInput
-    .addEventListener(
-        "input",
-        updateTextStats
-    );
-
+.addEventListener(
+"input",
+updateTextStats
+);
 $("#uppercase-text")
-    .addEventListener(
-        "click",
-        () => {
-            textInput.value =
-                textInput.value
-                    .toUpperCase();
-
-            updateTextStats();
-        }
-    );
-
+.addEventListener(
+"click",
+() => {
+textInput.value =
+textInput.value
+.toUpperCase();
+updateTextStats();
+}
+);
 $("#lowercase-text")
-    .addEventListener(
-        "click",
-        () => {
-            textInput.value =
-                textInput.value
-                    .toLowerCase();
-
-            updateTextStats();
-        }
-    );
-
+.addEventListener(
+"click",
+() => {
+textInput.value =
+textInput.value
+.toLowerCase();
+updateTextStats();
+}
+);
 $("#remove-duplicates")
-    .addEventListener(
-        "click",
-        removeDuplicates
-    );
-
+.addEventListener(
+"click",
+removeDuplicates
+);
 $("#clear-text")
-    .addEventListener(
-        "click",
-        () => {
-            textInput.value = "";
-
-            updateTextStats();
-        }
-    );
-
-
+.addEventListener(
+"click",
+() => {
+textInput.value = "";
+updateTextStats();
+}
+);
 /* URL Security */
-
 $("#check-url")
-    .addEventListener(
-        "click",
-        checkURL
-    );
-
-
+.addEventListener(
+"click",
+checkURL
+);
 /* Base64 */
-
 $("#base64-encode")
-    .addEventListener(
-        "click",
-        encodeBase64
-    );
-
+.addEventListener(
+"click",
+encodeBase64
+);
 $("#base64-decode")
-    .addEventListener(
-        "click",
-        decodeBase64
-    );
-
+.addEventListener(
+"click",
+decodeBase64
+);
 $("#copy-base64")
-    .addEventListener(
-        "click",
-        () =>
-            copyText(
-                base64Output.value,
-                $("#copy-base64")
-            )
-    );
-
-
+.addEventListener(
+"click",
+() =>
+copyText(
+base64Output.value,
+$("#copy-base64")
+)
+);
 /* Hash */
-
 hashInput
-    .addEventListener(
-        "input",
-        updateHashes
-    );
-
-
+.addEventListener(
+"input",
+updateHashes
+);
 /* JSON */
-
 $("#format-json")
-    .addEventListener(
-        "click",
-        formatJSON
-    );
-
-
+.addEventListener(
+"click",
+formatJSON
+);
 /* HTML */
-
 $("#escape-html")
-    .addEventListener(
-        "click",
-        escapeHTML
-    );
-
+.addEventListener(
+"click",
+escapeHTML
+);
 $("#unescape-html")
-    .addEventListener(
-        "click",
-        unescapeHTML
-    );
-
+.addEventListener(
+"click",
+unescapeHTML
+);
 $("#copy-html")
-    .addEventListener(
-        "click",
-        () =>
-            copyText(
-                htmlOutput.value,
-                $("#copy-html")
-            )
-    );
-
-
+.addEventListener(
+"click",
+() =>
+copyText(
+htmlOutput.value,
+$("#copy-html")
+)
+);
 /* Timestamp */
-
 $("#convert-timestamp")
-    .addEventListener(
-        "click",
-        convertTimestamp
-    );
-
+.addEventListener(
+"click",
+convertTimestamp
+);
 $("#current-timestamp")
-    .addEventListener(
-        "click",
-        useCurrentTimestamp
-    );
-
-
+.addEventListener(
+"click",
+useCurrentTimestamp
+);
 /* URL Encoder */
-
 $("#encode-url")
-    .addEventListener(
-        "click",
-        encodeURL
-    );
-
+.addEventListener(
+"click",
+encodeURL
+);
 $("#decode-url")
-    .addEventListener(
-        "click",
-        decodeURL
-    );
-
+.addEventListener(
+"click",
+decodeURL
+);
 $("#copy-url-output")
-    .addEventListener(
-        "click",
-        () =>
-            copyText(
-                urlEncodeOutput.value,
-                $("#copy-url-output")
-            )
-    );
-
-
+.addEventListener(
+"click",
+() =>
+copyText(
+urlEncodeOutput.value,
+$("#copy-url-output")
+)
+);
 /* =========================================================
-   INITIAL STATE
-   ========================================================= */
-
+INITIAL STATE
+========================================================= */
 generatePassword();
 updateTextStats();
 updateHashes();
-
